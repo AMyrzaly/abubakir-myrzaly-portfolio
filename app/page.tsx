@@ -99,7 +99,8 @@ export default function Home() {
         </div>
         <div className="portrait-wrap">
           <div className="portrait-frame">
-            <img src="/images/abubakir-professional.png" alt="Abubakir Myrzaly" />
+            <img className="portrait-dark" src="/images/abubakir-professional.png" alt="Abubakir Myrzaly wearing a navy blazer" />
+            <img className="portrait-light" src="/images/abubakir-casual.png" alt="Abubakir Myrzaly wearing a white shirt" />
           </div>
           <div className="portrait-note"><span>01</span><p>8+ years supporting enterprise technology where reliability matters.</p></div>
         </div>
