@@ -25,8 +25,9 @@ const experience = [
   },
   {
     dates: "2018 — 2021",
-    role: "Application Developer & Systems Analyst",
-    company: "CIBC",
+    role: "Progressive Application & Systems Roles",
+    company: "Canadian Imperial Bank of Commerce (CIBC)",
+    progression: "Application Developer · Technical System Analyst · Test Analyst",
     detail: "Delivered application, testing and infrastructure work for large-scale banking systems, including a SQL update spanning 12 million clients.",
   },
 ];
@@ -147,7 +148,11 @@ export default function Home() {
           {experience.map((item) => (
             <article key={item.company}>
               <time>{item.dates}</time>
-              <div><h3>{item.role}</h3><p className="company">{item.company}</p></div>
+              <div>
+                <h3>{item.role}</h3>
+                <p className="company">{item.company}</p>
+                {"progression" in item && item.progression ? <p className="progression">{item.progression}</p> : null}
+              </div>
               <p className="detail">{item.detail}</p>
             </article>
           ))}

@@ -90,6 +90,7 @@ h1 em, h2 em { color: var(--gold); font-weight: 400; }
 .timeline article { display: grid; grid-template-columns: 170px 1fr 1fr; gap: 35px; padding: 33px 0; border-bottom: 1px solid var(--line); }
 .timeline time, .company { color: var(--gold); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 .timeline h3 { font-family: var(--display); font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+.timeline .progression { margin: 13px 0 0; max-width: 440px; color: var(--muted); font-size: 11px; line-height: 1.6; }
 .timeline .detail { color: var(--muted); font-size: 13px; line-height: 1.65; margin: 0; }
 .education { margin-top: 70px; padding: 35px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 170px 1fr 1fr; gap: 35px; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .education > span { color: var(--gold); text-transform: uppercase; letter-spacing: .12em; font-size: 10px; }
