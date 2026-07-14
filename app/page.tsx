@@ -25,7 +25,7 @@ const experience = [
   },
   {
     dates: "2018 — 2021",
-    role: "Progressive Application & Systems Roles",
+    role: "Application Developer & Systems Analyst",
     company: "Canadian Imperial Bank of Commerce (CIBC)",
     progression: "Application Developer · Technical System Analyst · Test Analyst",
     detail: "Delivered application, testing and infrastructure work for large-scale banking systems, including a SQL update spanning 12 million clients.",
