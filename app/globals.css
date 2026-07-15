@@ -230,7 +230,9 @@ footer > div { display: flex; gap: 25px; color: var(--muted); }
   .about-grid { gap: 35px; margin-top: 45px; }
   .experience-heading { display: block; margin: 45px 0; }
   .experience-heading p { margin-top: 25px; }
-  .timeline article { grid-template-columns: 1fr; gap: 10px; }
+  .timeline article { grid-template-columns: 1fr; gap: 10px; padding-left: 24px; }
+  .timeline article::before { left: 0; }
+  .timeline time { padding-left: 0; }
   .timeline .detail { grid-column: auto; }
   .education { grid-template-columns: 1fr; gap: 18px; }
   .future-card { padding: 42px 25px; }
