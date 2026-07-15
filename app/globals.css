@@ -81,6 +81,15 @@ h1 em, h2 em { color: var(--gold); font-weight: 400; }
 .portrait-light { opacity: 0; transform: translateY(8px); }
 [data-theme="light"] .portrait-dark { opacity: 0; transform: translateY(8px); }
 [data-theme="light"] .portrait-light { opacity: 1; transform: translateY(0); }
+.portrait-slices { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.portrait-slice { position: absolute; inset: 0; overflow: hidden; will-change: transform; }
+.portrait-slice-one { clip-path: polygon(18% 18%, 92% 27%, 88% 35%, 12% 28%); transform: translateX(calc(var(--pointer-x) * 24px)) rotate(calc(var(--pointer-y) * -1.2deg)); animation: sliceOneArrive 1.1s cubic-bezier(.16,.84,.26,1) .35s both; }
+.portrait-slice-two { clip-path: polygon(10% 37%, 91% 31%, 95% 43%, 13% 49%); transform: translateX(calc(var(--pointer-x) * -30px)) rotate(calc(var(--pointer-y) * 1.4deg)); animation: sliceTwoArrive 1.15s cubic-bezier(.16,.84,.26,1) .46s both; }
+.portrait-slice-three { clip-path: polygon(23% 50%, 89% 44%, 84% 54%, 18% 60%); transform: translateX(calc(var(--pointer-x) * 18px)); animation: sliceThreeArrive 1.05s cubic-bezier(.16,.84,.26,1) .56s both; }
+.portrait-slice img { filter: saturate(1.06) contrast(1.08); }
+.portrait-lens { position: absolute; z-index: 3; width: 390px; height: 190px; left: 50%; top: 34%; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); background: rgba(255,255,255,.012); box-shadow: inset 0 1px 1px rgba(255,255,255,.18), 0 18px 45px rgba(0,0,0,.08); backdrop-filter: blur(1.5px) saturate(1.12); -webkit-backdrop-filter: blur(1.5px) saturate(1.12); transform: translate(calc(-50% + var(--pointer-x) * -12px), calc(-50% + var(--pointer-y) * -10px)) rotate(-7deg); pointer-events: none; animation: lensArrive 1.2s cubic-bezier(.16,.84,.26,1) .7s both; }
+.portrait-lens::before { content: ""; position: absolute; inset: 10px; border-radius: inherit; border: 1px solid var(--line); }
+.portrait-lens span { position: absolute; right: 38px; bottom: 19px; color: var(--gold); font-size: 8px; letter-spacing: .2em; white-space: nowrap; }
 .portrait-note { position: absolute; bottom: 25px; left: 25px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border: 1px solid var(--line); width: 245px; padding: 18px; display: flex; gap: 16px; animation: noteFloat 5s ease-in-out 1.2s infinite; }
 .portrait-note span { color: var(--gold); font-family: var(--display); }
 .portrait-note p { margin: 0; font-size: 11px; line-height: 1.5; color: var(--muted); }
@@ -122,6 +131,7 @@ h1 em, h2 em { color: var(--gold); font-weight: 400; }
 .timeline article:hover { background: color-mix(in srgb, var(--gold) 3%, transparent); }
 .timeline article:hover::before, .timeline article.is-visible::before { transform: scaleY(1); }
 .timeline time, .company { color: var(--gold); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.timeline time { padding-left: 24px; }
 .timeline h3 { font-family: var(--display); font-size: 24px; font-weight: 400; margin-bottom: 8px; }
 .timeline .progression { margin: 13px 0 0; max-width: 440px; color: var(--muted); font-size: 11px; line-height: 1.6; }
 .timeline .detail { color: var(--muted); font-size: 13px; line-height: 1.65; margin: 0; }
@@ -172,6 +182,26 @@ footer > div { display: flex; gap: 25px; color: var(--muted); }
   50% { transform: translateY(-7px); }
 }
 
+@keyframes sliceOneArrive {
+  from { opacity: 0; transform: translateX(-90px) rotate(-5deg); }
+  to { opacity: 1; }
+}
+
+@keyframes sliceTwoArrive {
+  from { opacity: 0; transform: translateX(110px) rotate(6deg); }
+  to { opacity: 1; }
+}
+
+@keyframes sliceThreeArrive {
+  from { opacity: 0; transform: translateX(-70px) rotate(-3deg); }
+  to { opacity: 1; }
+}
+
+@keyframes lensArrive {
+  from { opacity: 0; transform: translate(-50%, -44%) rotate(-15deg) scale(.82); }
+  to { opacity: 1; }
+}
+
 @media (max-width: 1000px) {
   .shell, .site-header { width: min(100% - 48px, 1420px); }
   .hero { grid-template-columns: 1fr; }
@@ -195,6 +225,7 @@ footer > div { display: flex; gap: 25px; color: var(--muted); }
   .hero-intro { width: 100%; font-size: 16px; }
   .hero-actions { align-items: flex-start; flex-direction: column; gap: 24px; }
   .portrait-frame { height: 480px; }
+  .portrait-lens { width: 300px; height: 150px; }
   .hero-atmosphere::after { background-size: 56px 56px; opacity: .1; }
   .signal-orbit { width: 280px; height: 280px; right: -105px; top: 24%; }
   .portrait-wrap { transform: none; }
@@ -223,4 +254,6 @@ footer > div { display: flex; gap: 25px; color: var(--muted); }
   [data-reveal], .capability-list > div, .timeline > article { opacity: 1 !important; transform: none !important; filter: none !important; }
   .hero-atmosphere i { display: none; }
   .portrait-wrap { transform: none !important; }
+  .portrait-slice-one, .portrait-slice-two, .portrait-slice-three, .portrait-lens { animation: none !important; transform: translate(-50%, -50%) rotate(-7deg) !important; }
+  .portrait-slice-one, .portrait-slice-two, .portrait-slice-three { transform: none !important; }
 }

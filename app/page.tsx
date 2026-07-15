@@ -189,6 +189,21 @@ export default function Home() {
           <div className="portrait-frame">
             <img className="portrait-dark" src="/images/abubakir-professional.png" alt="Abubakir Myrzaly wearing a navy blazer" />
             <img className="portrait-light" src="/images/abubakir-casual.png" alt="Abubakir Myrzaly wearing a white shirt" />
+            <div className="portrait-slices" aria-hidden="true">
+              <div className="portrait-slice portrait-slice-one">
+                <img className="portrait-dark" src="/images/abubakir-professional.png" alt="" />
+                <img className="portrait-light" src="/images/abubakir-casual.png" alt="" />
+              </div>
+              <div className="portrait-slice portrait-slice-two">
+                <img className="portrait-dark" src="/images/abubakir-professional.png" alt="" />
+                <img className="portrait-light" src="/images/abubakir-casual.png" alt="" />
+              </div>
+              <div className="portrait-slice portrait-slice-three">
+                <img className="portrait-dark" src="/images/abubakir-professional.png" alt="" />
+                <img className="portrait-light" src="/images/abubakir-casual.png" alt="" />
+              </div>
+            </div>
+            <div className="portrait-lens" aria-hidden="true"><span>SUPPORT · SYSTEMS · CLARITY</span></div>
           </div>
           <div className="portrait-note"><span>01</span><p>8+ years supporting enterprise technology where reliability matters.</p></div>
         </div>
