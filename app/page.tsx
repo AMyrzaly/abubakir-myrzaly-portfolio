@@ -214,7 +214,7 @@ export default function Home() {
               <i className="system-node node-three" />
               <i className="system-node node-four" />
             </div>
-            <img className="portrait-dark" src="/images/abubakir-professional.png" alt="Abubakir Myrzaly wearing a navy blazer" />
+            <img className="portrait-dark" src="/images/abubakir-professional-transparent.png" alt="Abubakir Myrzaly wearing a navy blazer" />
             <img className="portrait-light" src="/images/abubakir-casual.png" alt="Abubakir Myrzaly wearing a white shirt" />
           </div>
           <div className="portrait-note"><span>01</span><p>8+ years supporting enterprise technology where reliability matters.</p></div>
