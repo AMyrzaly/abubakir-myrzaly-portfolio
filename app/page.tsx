@@ -139,6 +139,23 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".metric-card"));
+
+    const listeners = cards.map((card) => {
+      const followPointer = (event: PointerEvent) => {
+        const bounds = card.getBoundingClientRect();
+        card.style.setProperty("--glow-x", `${event.clientX - bounds.left}px`);
+        card.style.setProperty("--glow-y", `${event.clientY - bounds.top}px`);
+      };
+
+      card.addEventListener("pointermove", followPointer);
+      return () => card.removeEventListener("pointermove", followPointer);
+    });
+
+    return () => listeners.forEach((removeListener) => removeListener());
+  }, []);
+
   function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -187,23 +204,18 @@ export default function Home() {
         </div>
         <div className="portrait-wrap hero-enter hero-enter-late">
           <div className="portrait-frame">
+            <div className="systems-scene" aria-hidden="true">
+              <div className="systems-grid" />
+              <div className="data-plane data-plane-one"><span>01</span><b>L2 / L3</b></div>
+              <div className="data-plane data-plane-two"><span>02</span><b>SQL</b></div>
+              <div className="data-plane data-plane-three"><span>03</span><b>UP</b></div>
+              <i className="system-node node-one" />
+              <i className="system-node node-two" />
+              <i className="system-node node-three" />
+              <i className="system-node node-four" />
+            </div>
             <img className="portrait-dark" src="/images/abubakir-professional.png" alt="Abubakir Myrzaly wearing a navy blazer" />
             <img className="portrait-light" src="/images/abubakir-casual.png" alt="Abubakir Myrzaly wearing a white shirt" />
-            <div className="portrait-slices" aria-hidden="true">
-              <div className="portrait-slice portrait-slice-one">
-                <img className="portrait-dark" src="/images/abubakir-professional.png" alt="" />
-                <img className="portrait-light" src="/images/abubakir-casual.png" alt="" />
-              </div>
-              <div className="portrait-slice portrait-slice-two">
-                <img className="portrait-dark" src="/images/abubakir-professional.png" alt="" />
-                <img className="portrait-light" src="/images/abubakir-casual.png" alt="" />
-              </div>
-              <div className="portrait-slice portrait-slice-three">
-                <img className="portrait-dark" src="/images/abubakir-professional.png" alt="" />
-                <img className="portrait-light" src="/images/abubakir-casual.png" alt="" />
-              </div>
-            </div>
-            <div className="portrait-lens" aria-hidden="true"><span>SUPPORT · SYSTEMS · CLARITY</span></div>
           </div>
           <div className="portrait-note"><span>01</span><p>8+ years supporting enterprise technology where reliability matters.</p></div>
         </div>
