@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 const EMAIL = "myrzaly.abubakir@gmail.com";
 
@@ -43,8 +43,52 @@ const capabilities = [
   "Release & Deployment Support",
 ];
 
+function AnimatedMetric({ target, suffix, children }: { target: number; suffix: string; children: React.ReactNode }) {
+  const metricRef = useRef<HTMLElement>(null);
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const node = metricRef.current;
+    if (!node) return;
+
+    let frame = 0;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setValue(target);
+        return;
+      }
+
+      const startedAt = performance.now();
+      const animate = (now: number) => {
+        const progress = Math.min((now - startedAt) / 1100, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(Math.round(target * eased));
+        if (progress < 1) frame = requestAnimationFrame(animate);
+      };
+      frame = requestAnimationFrame(animate);
+    }, { threshold: 0.45 });
+
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [target]);
+
+  return (
+    <article ref={metricRef} className="metric-card" data-reveal>
+      <strong aria-label={`${target}${suffix}`}>{value}{suffix}</strong>
+      <p>{children}</p>
+    </article>
+  );
+}
+
 export default function Home() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("abubakir-theme");
@@ -55,6 +99,62 @@ export default function Home() {
     document.documentElement.dataset.theme = theme;
     window.localStorage.setItem("abubakir-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.classList.add("motion-ready");
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal], .capability-list > div, .timeline > article"));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        (entry.target as HTMLElement).classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -10%", threshold: 0.12 });
+
+    revealItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const move = (event: PointerEvent) => {
+      const bounds = hero.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      hero.style.setProperty("--pointer-x", x.toFixed(3));
+      hero.style.setProperty("--pointer-y", y.toFixed(3));
+    };
+    const reset = () => {
+      hero.style.setProperty("--pointer-x", "0");
+      hero.style.setProperty("--pointer-y", "0");
+    };
+
+    hero.addEventListener("pointermove", move);
+    hero.addEventListener("pointerleave", reset);
+    return () => {
+      hero.removeEventListener("pointermove", move);
+      hero.removeEventListener("pointerleave", reset);
+    };
+  }, []);
+
+  useEffect(() => {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".metric-card"));
+
+    const listeners = cards.map((card) => {
+      const followPointer = (event: PointerEvent) => {
+        const bounds = card.getBoundingClientRect();
+        card.style.setProperty("--glow-x", `${event.clientX - bounds.left}px`);
+        card.style.setProperty("--glow-y", `${event.clientY - bounds.top}px`);
+      };
+
+      card.addEventListener("pointermove", followPointer);
+      return () => card.removeEventListener("pointermove", followPointer);
+    });
+
+    return () => listeners.forEach((removeListener) => removeListener());
+  }, []);
 
   function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -88,9 +188,13 @@ export default function Home() {
         </button>
       </header>
 
-      <section className="hero shell" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow"><span /> Software Support Engineer · Toronto</p>
+      <section className="hero shell" id="top" ref={heroRef}>
+        <div className="hero-atmosphere" aria-hidden="true">
+          <div className="signal-orbit" />
+          <i /><i /><i /><i /><i /><i />
+        </div>
+        <div className="hero-copy hero-enter">
+          <p className="eyebrow"><span /> Software Support Engineer</p>
           <h1>Calm systems.<br /><em>Clear outcomes.</em></h1>
           <p className="hero-intro">I keep complex software dependable—turning incidents, data issues and technical uncertainty into stable services and confident customers.</p>
           <div className="hero-actions">
@@ -98,9 +202,19 @@ export default function Home() {
             <a className="button text-button" href="/documents/Abubakir-Myrzaly-Resume.docx" download>Download résumé <span>↓</span></a>
           </div>
         </div>
-        <div className="portrait-wrap">
+        <div className="portrait-wrap hero-enter hero-enter-late">
           <div className="portrait-frame">
-            <img className="portrait-dark" src="/images/abubakir-professional.png" alt="Abubakir Myrzaly wearing a navy blazer" />
+            <div className="systems-scene" aria-hidden="true">
+              <div className="systems-grid" />
+              <div className="data-plane data-plane-one"><span>01</span><b>L2 / L3</b></div>
+              <div className="data-plane data-plane-two"><span>02</span><b>SQL</b></div>
+              <div className="data-plane data-plane-three"><span>03</span><b>UP</b></div>
+              <i className="system-node node-one" />
+              <i className="system-node node-two" />
+              <i className="system-node node-three" />
+              <i className="system-node node-four" />
+            </div>
+            <img className="portrait-dark" src="/images/abubakir-professional-transparent.png" alt="Abubakir Myrzaly wearing a navy blazer" />
             <img className="portrait-light" src="/images/abubakir-casual.png" alt="Abubakir Myrzaly wearing a white shirt" />
           </div>
           <div className="portrait-note"><span>01</span><p>8+ years supporting enterprise technology where reliability matters.</p></div>
@@ -108,20 +222,20 @@ export default function Home() {
       </section>
 
       <section className="impact shell" aria-label="Selected career impact">
-        <div className="section-label">Selected impact</div>
+        <div className="section-label" data-reveal>Selected impact</div>
         <div className="impact-grid">
-          <article><strong>12M</strong><p>client records improved through a major SQL update at CIBC</p></article>
-          <article><strong>5K+</strong><p>salary payments protected during a critical payroll incident</p></article>
-          <article><strong>1K+</strong><p>students restored after resolving a widespread platform conflict</p></article>
-          <article><strong>20+</strong><p>knowledge resources created to strengthen support consistency</p></article>
+          <AnimatedMetric target={12} suffix="M">client records improved through a major SQL update at CIBC</AnimatedMetric>
+          <AnimatedMetric target={5} suffix="K+">salary payments protected during a critical payroll incident</AnimatedMetric>
+          <AnimatedMetric target={1} suffix="K+">students restored after resolving a widespread platform conflict</AnimatedMetric>
+          <AnimatedMetric target={20} suffix="+">knowledge resources created to strengthen support consistency</AnimatedMetric>
         </div>
       </section>
 
       <section className="about shell" id="about">
-        <div className="section-label">About / 02</div>
+        <div className="section-label" data-reveal>About / 02</div>
         <div className="about-grid">
-          <h2>Technology works best when people can <em>trust it.</em></h2>
-          <div className="about-copy">
+          <h2 data-reveal>Technology works best when people can <em>trust it.</em></h2>
+          <div className="about-copy" data-reveal>
             <p>I’m Abubakir Myrzaly, a software support engineer with experience across enterprise SaaS, fintech, HCM and data platforms. I work at the point where systems, customers and engineering teams meet.</p>
             <p>My approach combines disciplined investigation with clear communication. Whether I’m managing a production escalation, tracing a data issue or improving a support process, the goal is the same: restore confidence and leave the system stronger than I found it.</p>
             <a href="https://www.linkedin.com/in/abubakir-myrzaly-449195124/" target="_blank" rel="noreferrer">View LinkedIn profile ↗</a>
@@ -130,7 +244,7 @@ export default function Home() {
       </section>
 
       <section className="capabilities shell">
-        <div className="section-label">Core expertise / 03</div>
+        <div className="section-label" data-reveal>Core expertise / 03</div>
         <div className="capability-list">
           {capabilities.map((capability, index) => (
             <div key={capability}><span>{String(index + 1).padStart(2, "0")}</span><p>{capability}</p><i>↗</i></div>
@@ -139,8 +253,8 @@ export default function Home() {
       </section>
 
       <section className="experience shell" id="experience">
-        <div className="section-label">Experience / 04</div>
-        <div className="experience-heading">
+        <div className="section-label" data-reveal>Experience / 04</div>
+        <div className="experience-heading" data-reveal>
           <h2>Built in production.</h2>
           <p>A career shaped by high-stakes environments, complex systems and measurable results.</p>
         </div>
@@ -157,7 +271,7 @@ export default function Home() {
             </article>
           ))}
         </div>
-        <div className="education">
+        <div className="education" data-reveal>
           <span>Education</span>
           <p><strong>Bachelor of Technology, Software Engineering</strong><br />McMaster University</p>
           <p><strong>Advanced Diploma, Software Engineering Technology</strong><br />Centennial College</p>
@@ -165,8 +279,8 @@ export default function Home() {
       </section>
 
       <section className="future-work shell">
-        <div className="section-label">Selected work / 05</div>
-        <div className="future-card">
+        <div className="section-label" data-reveal>Selected work / 05</div>
+        <div className="future-card" data-reveal>
           <p>PROJECTS ARE THE NEXT CHAPTER</p>
           <h2>New builds,<br /><em>coming soon.</em></h2>
           <span>This portfolio is designed to grow. Future software and data projects will live here as focused case studies.</span>
@@ -174,13 +288,13 @@ export default function Home() {
       </section>
 
       <section className="contact shell" id="contact">
-        <div className="contact-intro">
+        <div className="contact-intro" data-reveal>
           <div className="section-label">Contact / 06</div>
           <h2>Let’s make complex<br /><em>feel simple.</em></h2>
           <p>Hiring, collaboration or an interesting technical challenge—tell me what you’re working on.</p>
           <a href={`mailto:${EMAIL}`}>{EMAIL} ↗</a>
         </div>
-        <form onSubmit={sendMessage}>
+        <form onSubmit={sendMessage} data-reveal>
           <label><span>Your name</span><input required name="name" autoComplete="name" placeholder="Jane Smith" /></label>
           <label><span>Your email</span><input required type="email" name="email" autoComplete="email" placeholder="jane@company.com" /></label>
           <label><span>How can I help?</span><textarea required name="message" rows={4} placeholder="A few details about the role, project or idea..." /></label>
