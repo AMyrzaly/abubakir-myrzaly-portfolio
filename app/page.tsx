@@ -194,7 +194,7 @@ export default function Home() {
           <i /><i /><i /><i /><i /><i />
         </div>
         <div className="hero-copy hero-enter">
-          <p className="eyebrow"><span /> Software Support Engineer · Toronto</p>
+          <p className="eyebrow"><span /> Software Support Engineer</p>
           <h1>Calm systems.<br /><em>Clear outcomes.</em></h1>
           <p className="hero-intro">I keep complex software dependable—turning incidents, data issues and technical uncertainty into stable services and confident customers.</p>
           <div className="hero-actions">
